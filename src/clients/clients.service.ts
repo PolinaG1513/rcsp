@@ -5,6 +5,7 @@ import { In, Repository } from 'typeorm';
 import { Workers } from 'src/workers/workers.entity';
 import { CreateClientsDTO } from './dto/ClientsDTO';
 import { IncompleteClientsDto } from './dto/incomplete-clients.dto';
+import { Tours } from 'src/tours/tours.entity';
 
 
 @Injectable()
@@ -13,7 +14,9 @@ export class ClientsService {
         @InjectRepository(Workers)
         private readonly workersRepository: Repository<Workers>,
         @InjectRepository(Clients)
-        private readonly clientsRepository: Repository<Clients>) {}
+        private readonly clientsRepository: Repository<Clients>,
+        @InjectRepository(Tours)
+        private readonly toutsRepository: Repository<Tours>) {}
 
         async create(clientsDTO: CreateClientsDTO): Promise<Clients> {
             const client = this.clientsRepository.create();
@@ -26,6 +29,9 @@ export class ClientsService {
             const workers = await this.workersRepository.findBy({
                 id: In(clientsDTO.workers),
             });
+            const tours = await this.toutsRepository.findBy({
+                id: In(clientsDTO.tours),
+            })
             client.workers = workers;
             await this.clientsRepository.save(client);
             return client;
@@ -34,15 +40,16 @@ export class ClientsService {
         findOne(id: number): Promise<Clients> {
             return this.clientsRepository.findOne({
                 where: {id},
-                relations: {workers: true},
+                relations: {workers: true,
+                            tours: true,},
             });
         }
 
         async findAll(): Promise<Clients[]> {
-            const clients = await this.clientsRepository.find({
-                relations: {workers:true},
+            return await this.clientsRepository.find({
+                relations: {workers:true,
+                            tours: true,},
             });
-            return clients;
         }
 
         async findIncomplete(): Promise<IncompleteClientsDto[]> {

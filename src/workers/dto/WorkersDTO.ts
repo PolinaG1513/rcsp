@@ -5,5 +5,5 @@ export class CreateWorkersDto {
     education: string;
     telephone: number;
     salary: number;
-    tours: number[];
+    clients: number[];
 }

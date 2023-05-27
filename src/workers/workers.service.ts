@@ -14,10 +14,8 @@ export class WorkersService {
         @InjectRepository(Workers)
         private readonly workersRepository: Repository<Workers>,
         @InjectRepository(Clients)
-        private readonly clientsRepository: Repository<Clients>,
-        @InjectRepository(Tours)
-        private readonly toursRepository: Repository<Tours>,
-    ) {}
+        private readonly clientsRepository: Repository<Clients>) {}
+
         async create(workersDto: CreateWorkersDto): Promise<Workers> {
             const workers = this.workersRepository.create();
             workers.fullname = workersDto.fullname;
@@ -26,10 +24,10 @@ export class WorkersService {
             workers.education = workersDto.position;
             workers.telephone = workersDto.telephone;
             workers.salary = workersDto.salary;
-            const tours = await this.toursRepository.findBy({
-                id: In(workersDto.tours),
+            const clients = await this.clientsRepository.findBy({
+                id: In(workersDto.clients),
             });
-            workers.tours = tours;
+            workers.clients = clients;
             await this.workersRepository.save(workers);
             return workers;
         }
@@ -37,8 +35,7 @@ export class WorkersService {
         findOne(id: number): Promise<Workers> {
             return this.workersRepository.findOne({
                 where: {id},
-                relations: {clients: true,
-                            tours:true},
+                relations: {clients: true,}
             });
         }
 
@@ -46,8 +43,7 @@ export class WorkersService {
             const workers = await this.workersRepository.find({
                 relations: {
                     clients: true,
-                    tours: true,
-                },
+                }
             });
             return workers;
         }
@@ -73,7 +69,6 @@ export class WorkersService {
             workers.education = updatedWorkers.education;
             workers.telephone = updatedWorkers.telephone;
             workers.salary = updatedWorkers.salary;
-            workers.tours = updatedWorkers.tours;
             workers.clients = updatedWorkers.clients;
             await this.workersRepository.save(workers);
             return workers;

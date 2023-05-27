@@ -1,4 +1,4 @@
-import { Workers } from 'src/workers/workers.entity';
+import { Clients } from 'src/clients/clients.entity';
 import {
   Column,
   Entity,
@@ -11,19 +11,24 @@ import {
 export class Tours {
   @PrimaryGeneratedColumn()
   id:number;
+
   @Column()
   name: string;
+
   @Column()
-  date: number;
+  date: string;
+
   @Column()
   countdays: number;
+
   @Column()
   cost:number;
+
   @Column()
   country:string;
-  @ManyToMany((type)=> Workers, (workers) => workers.tours)
+  @ManyToMany((type)=> Clients, (clients) => clients.tours)
   @JoinTable({name: 'tours_workers',
               joinColumn: {name: 'tours_id'},
-              inverseJoinColumn: {name: 'tours_id'},})
-  workers: Workers[];
+              inverseJoinColumn: {name: 'clients_id'},})
+  clients: Clients[];
 }

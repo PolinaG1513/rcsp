@@ -27,11 +27,6 @@ export class Workers {
     @ManyToMany((type)=> Clients, (clients) => clients.workers)
     @JoinTable({name: 'clients_workers',
                 joinColumn: {name: 'workers_id'},
-                inverseJoinColumn: {name: 'workers_id'},})
+                inverseJoinColumn: {name: 'clients_id'},})
     clients: Clients[];
-    @ManyToMany((type) => Tours, (tours) => tours.workers)
-    @JoinTable({name: 'clients_tours',
-                joinColumn: { name: 'clients_id' },
-                inverseJoinColumn: { name: 'tours_id' },})
-    tours: Tours[];
 }

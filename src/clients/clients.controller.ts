@@ -9,24 +9,31 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class ClientsController {
     constructor(private readonly clientsService: ClientsService) {}
 
+    @ApiOperation({summary: 'Поиск всех клиентов'})
     @Get() 
-        findAll() {
+        findAll() :Promise<Clients[]> {
         return this.clientsService.findAll();
     }
+
+    @ApiOperation({summary: 'Поиск конкретного клиента'})
     @Get(':id')
         findOne(@Param('id') id: string) {
         return this.clientsService.findOne(+id);
     }
+
+    @ApiOperation({summary: 'Изменение клиента'})
     @Put(':id')
         update(@Param('id') id: string, @Body() updateClients: Clients) {
         return this.clientsService.update(+id, updateClients);
     }
-@ApiOperation({summary: 'Создание клиента'})
+
+    @ApiOperation({summary: 'Создание клиента'})
     @Post()
-        create(@Body() clientsDTO: CreateClientsDTO) {
+        create(@Body() clientsDTO: CreateClientsDTO) : Promise<Clients>{
         return this.clientsService.create(clientsDTO);
     }   
 
+    @ApiOperation({summary: 'Удаление клиента'})
     @Delete(':id')
         remove(@Param('id') id: string) {
         return this.clientsService.remove(+id);

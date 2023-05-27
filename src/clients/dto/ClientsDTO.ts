@@ -6,4 +6,5 @@ export class CreateClientsDTO {
     telephone: number;
     email: string;
     workers: number[];
+    tours: number[];
 }
